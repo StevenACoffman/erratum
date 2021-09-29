@@ -1,0 +1,8 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+package StevenACoffman.erratum;
+option go_package = "erratum";
+
+message EncodedFields {
+  map<string, google.protobuf.Any> fields = 1;
+}
