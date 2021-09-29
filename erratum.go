@@ -58,7 +58,7 @@ func (w *withFields) SafeFormatError(p errors.Printer) (next error) {
 	if p.Detail() {
 		if p.Detail() && w.fields != nil {
 			p.Printf("fields: [")
-			redactableTagsIterate(w.fields, func(i int, r redact.RedactableString) {
+			redactableFieldsIterate(w.fields, func(i int, r redact.RedactableString) {
 				if i > 0 {
 					p.Printf(",")
 				}
@@ -71,20 +71,20 @@ func (w *withFields) SafeFormatError(p errors.Printer) (next error) {
 	return w.cause
 }
 
-func redactableTagsIterate(fields Fields, fn func(i int, s redact.RedactableString)) {
+func redactableFieldsIterate(fields Fields, fn func(i int, s redact.RedactableString)) {
 	var empty redact.SafeString
 	i := 0
 	for k, v := range fields {
-		i++
 		eq := empty
 		var val interface{} = empty
 		if v != nil {
 			if len(k) > 1 {
-				eq = "="
+				eq = ":"
 			}
 			val = v
 		}
 		res := redact.Sprintf("%s%s%v", redact.Safe(k), eq, val)
 		fn(i, res)
+		i++
 	}
 }
